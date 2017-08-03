@@ -6,6 +6,8 @@ This code is released into the "public domain" by its author(s).  Anybody may us
 
 If you find a bug or make an improvement, it would be courteous to let the author know, but it is not compulsory.
 */
+const math = require('mathjs');
+
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
@@ -780,7 +782,10 @@ ValidatorContext.prototype.validateMultipleOf = function validateMultipleOf(data
 	}
 	if (typeof data === "number") {
 		var remainder = (data/multipleOf)%1;
-		if (remainder >= CLOSE_ENOUGH_LOW && remainder < CLOSE_ENOUGH_HIGH) {
+		var valid;
+        valid = (data/multipleOf === Math.floor(data/multipleOf));
+		valid = math.mod(math.bignumber(data), math.bignumber(multipleOf)).equals(0);
+		if (!valid) {
 			return this.createError(ErrorCodes.NUMBER_MULTIPLE_OF, {value: data, multipleOf: multipleOf}, '', '', null, data, schema);
 		}
 	}
